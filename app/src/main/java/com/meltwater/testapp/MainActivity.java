@@ -43,21 +43,34 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
-        getMessagesList();
+
+        List<Message> newMessages = getMessagesList();
 
     }
 
-    private void getMessagesList() {
+    /**
+     * This method will call other methods to get the content and return a List of Message objects
+     * @return List <Message>
+     */
+
+    private List<Message> getMessagesList() {
         JSONObject object = new JSONObject();
         try {
+            // Retrieving the messages from the given url using the https protocol.
             URL url = new URL("https://alpha-api.app.net/stream/0/posts/stream/global");
             object = httpsConnectionHandler(url);
         } catch (MalformedURLException e) {
             logger.log(Level.SEVERE, e.toString());
         }
-        messageJsonArrayExtractor(object);
+        // Filtering the received JSON response and putting it into a list of Message objects
+        return messageJsonArrayExtractor(object);
     }
 
+    /**
+     *  Macke the Https connection to the given url and returns a json object formated content
+     * @param url teh api url to receive the messages
+     * @return JSONObject the json formatted response
+     */
     private JSONObject httpsConnectionHandler(URL url) {
         JSONObject object= new JSONObject();
         try {
@@ -73,8 +86,13 @@ public class MainActivity extends AppCompatActivity {
         return object;
     }
 
+    /**
+     *  extruct the messages from the Json response and return a list of Message Objects
+     * @param jsonIn
+     * @return List <Message>
+     */
     private List<Message> messageJsonArrayExtractor(JSONObject jsonIn) {
-        List<Message> messages = new LinkedList<Message>();
+        List<Message> messages = new LinkedList<>();
         if (jsonIn != null) {
             try {
                 JSONArray data = new JSONArray(jsonIn.getString("data"));

@@ -15,12 +15,22 @@ public class Message {
     private String posterName;
     private String postText;
 
+    /**
+     * Constructor that will receive a message JsonObject and call the filtering methods and assign the values
+     * *** Not a god approach to add logic into the constructor usually i do it by initializing the object in a different method or pass already filtered values.
+     * @param message
+     */
     public Message(JSONObject message) {
         this.postText = extractText(message);
         this.posterName = extractUserData(message, "username");
         this.avatarLink = extractUserData(message, "avatar_image");
     }
 
+    /**
+     * Extract the text of a message from the Json object
+     * @param message
+     * @return
+     */
     private String extractText(JSONObject message) {
         try {
             if (message.has("text")) {
@@ -33,6 +43,12 @@ public class Message {
         return "";
     }
 
+    /**
+     * Extract the name and the avatar url from the json object depending on what field you wish to extract
+     * @param message
+     * @param field
+     * @return
+     */
     private String extractUserData(JSONObject message, String field) {
         try {
             JSONObject userData = message.getJSONObject("user");
