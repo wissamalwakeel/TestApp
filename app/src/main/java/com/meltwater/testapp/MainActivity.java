@@ -1,8 +1,11 @@
 package com.meltwater.testapp;
 
 import android.os.StrictMode;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import org.json.JSONArray;
@@ -18,7 +21,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -29,10 +31,14 @@ import javax.net.ssl.HttpsURLConnection;
 public class MainActivity extends AppCompatActivity {
     private static final Logger logger = Logger.getLogger(MainActivity.class.toString());
 
-    private List<Message> messageList = new ArrayList<Message>();
+    private RecyclerView recyclerView;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private MyAdapter adapter;
 
-    private RecyclerView mRecyclerView;
-    private RecyclerAdapter adapter;
+    private ArrayList<Message> messageList;
+
+
+
 
     private int counter =0;
     private String count;
@@ -45,16 +51,24 @@ public class MainActivity extends AppCompatActivity {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         // making the first call to populate the list
-        updateList();
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
 
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        messageList = getMessagesList();
+        adapter = new MyAdapter(this, messageList, swipeRefreshLayout);
+        recyclerView.setAdapter(adapter);
     }
 
     public void updateList(){
-        adapter = new RecyclerAdapter(MainActivity.this, messageList);
-        mRecyclerView.setAdapter(adapter);
-        adapter.clearAdapter();
-        messageList = getMessagesList();
-        adapter.notifyDataSetChanged();
+//        adapter = new MyAdapter(MainActivity.this, messageList);
+//        mRecyclerView.setAdapter(adapter);
+//        adapter.clearAdapter();
+//        messageList = getMessagesList();
+//        adapter.notifyDataSetChanged();
+//        mRecyclerView.invalidate();
     }
 
 
@@ -73,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
      * @return List <Message>
      */
 
-    private List<Message> getMessagesList() {
+    private ArrayList<Message> getMessagesList() {
         JSONObject object = new JSONObject();
         try {
             // Retrieving the messages from the given url using the https protocol.
@@ -111,8 +125,8 @@ public class MainActivity extends AppCompatActivity {
      * @param jsonIn
      * @return List <Message>
      */
-    private List<Message> messageJsonArrayExtractor(JSONObject jsonIn) {
-        List<Message> messages = new ArrayList<Message>();
+    private ArrayList<Message> messageJsonArrayExtractor(JSONObject jsonIn) {
+        ArrayList<Message> messages = new ArrayList<Message>();
         if (jsonIn != null) {
             try {
                 JSONArray data = new JSONArray(jsonIn.getString("data"));
@@ -133,4 +147,7 @@ public class MainActivity extends AppCompatActivity {
     public void onStop() {
         super.onStop();
     }
+
+
+
 }
