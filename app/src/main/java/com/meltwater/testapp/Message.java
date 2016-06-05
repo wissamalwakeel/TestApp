@@ -1,5 +1,7 @@
 package com.meltwater.testapp;
 
+import android.text.Html;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -14,6 +16,7 @@ public class Message {
     private String avatarLink;
     private String posterName;
     private String postText;
+    private String messageId;
 
     /**
      * Constructor that will receive a message JsonObject and call the filtering methods and assign the values
@@ -21,20 +24,23 @@ public class Message {
      * @param message
      */
     public Message(JSONObject message) {
-        this.postText = extractText(message);
+        this.postText = extractMessageData(message, "text");
         this.posterName = extractUserData(message, "username");
         this.avatarLink = extractUserData(message, "avatar_image");
+        this.messageId = extractMessageData(message, "id");
+        this.posterName = this.posterName + "    Message ID:" + extractMessageData(message, "id");
     }
+
 
     /**
      * Extract the text of a message from the Json object
      * @param message
      * @return
      */
-    private String extractText(JSONObject message) {
+    private String extractMessageData(JSONObject message, String field) {
         try {
-            if (message.has("text")) {
-                String text = message.getString("text");
+            if (message.has(field)) {
+                String text = Html.fromHtml(message.getString(field)).toString();
                 return text;
             }
         } catch (JSONException e) {
@@ -74,5 +80,9 @@ public class Message {
 
     public String getPostText() {
         return postText;
+    }
+
+    public String getMessageId() {
+        return this.messageId;
     }
 }

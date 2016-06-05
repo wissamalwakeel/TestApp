@@ -19,7 +19,7 @@ import java.util.ArrayList;
 public class MyAdapter extends RecyclerView.Adapter<MyHolder> {
 
 
-
+    MessageHandler messageHandler;
     private Context context;
     private ArrayList<Message> messageList;
     private ImageLoader imageLoader;
@@ -66,12 +66,18 @@ public class MyAdapter extends RecyclerView.Adapter<MyHolder> {
             @Override
             public void run() {
                 // add new messages heres
-                messageList.add(0,messageList.get(0));
+                messageHandler = new MessageHandler();
+                ArrayList<Message> existingMessageList = messageList;
+                clearAdapter();
+                messageList = messageHandler.addNewMessages(existingMessageList);
                 MyAdapter.this.notifyDataSetChanged();
                 swipeRefreshLayout.setRefreshing(false);
             }
         },3000);
     }
+
+
+
 
     public void clearAdapter() {
         messageList.clear();

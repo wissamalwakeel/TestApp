@@ -21,7 +21,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -36,17 +35,13 @@ public class MainActivity extends AppCompatActivity {
     private MyAdapter adapter;
 
     private ArrayList<Message> messageList;
-
-
-
-
-    private int counter =0;
-    private String count;
+    private MessageHandler messageHandler;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        messageHandler = new MessageHandler();
         setContentView(R.layout.activity_main);
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
@@ -57,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        messageList = getMessagesList();
+        messageList = messageHandler.getMessagesList();
         adapter = new MyAdapter(this, messageList, swipeRefreshLayout);
         recyclerView.setAdapter(adapter);
     }
@@ -82,66 +77,7 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
     }
 
-    /**
-     * This method will call other methods to get the content and return a List of Message objects
-     * @return List <Message>
-     */
 
-    private ArrayList<Message> getMessagesList() {
-        JSONObject object = new JSONObject();
-        try {
-            // Retrieving the messages from the given url using the https protocol.
-            URL url = new URL("https://alpha-api.app.net/stream/0/posts/stream/global");
-            object = httpsConnectionHandler(url);
-        } catch (MalformedURLException e) {
-            logger.log(Level.SEVERE, e.toString());
-        }
-        // Filtering the received JSON response and putting it into a list of Message objects
-        return messageJsonArrayExtractor(object);
-    }
-
-    /**
-     *  Macke the Https connection to the given url and returns a json object formated content
-     * @param url teh api url to receive the messages
-     * @return JSONObject the json formatted response
-     */
-    private JSONObject httpsConnectionHandler(URL url) {
-        JSONObject object= new JSONObject();
-        try {
-            HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
-            connection.connect();
-            InputStream in = connection.getInputStream();
-            BufferedReader br = new BufferedReader(new InputStreamReader(in));
-            object = new JSONObject(br.readLine());
-            br.close();
-        } catch (IOException | JSONException e) {
-            logger.log(Level.SEVERE, e.toString());
-        }
-        return object;
-    }
-
-    /**
-     *  extruct the messages from the Json response and return a list of Message Objects
-     * @param jsonIn
-     * @return List <Message>
-     */
-    private ArrayList<Message> messageJsonArrayExtractor(JSONObject jsonIn) {
-        ArrayList<Message> messages = new ArrayList<Message>();
-        if (jsonIn != null) {
-            try {
-                JSONArray data = new JSONArray(jsonIn.getString("data"));
-                if (data !=null && data.length() > 0 ) {
-                    for (int i = 0 ; i< data.length() ; i++) {
-                        JSONObject message = data.getJSONObject(i);
-                        messages.add(new Message(message));
-                    }
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        return messages;
-    }
 
     @Override
     public void onStop() {
