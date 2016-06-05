@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:padding="1dp"
+    android:id="@+id/itemRelativeLayout">
+
+    <com.android.volley.toolbox.NetworkImageView
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:scaleType="fitXY"
+        android:id="@+id/avatarImage"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="23dp"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/avatarImage"
+        android:background="@color/mwBlue"
+        android:id="@+id/posterName"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:textAppearance="@style/TextAppearance.StatusBar.EventContent.Title"
+        android:text="Dummy Name Text"
+        android:paddingLeft="4dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/posterName"
+        android:layout_toEndOf="@+id/avatarImage"
+        android:id="@+id/bodyText"
+        android:text="This is just a dummy test This is just a dummy test This is just a dummy test "
+        android:padding="3dp"
+        />
+</RelativeLayout>

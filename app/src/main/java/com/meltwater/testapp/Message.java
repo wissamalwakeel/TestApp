@@ -63,4 +63,16 @@ public class Message {
         }
         return "";
     }
+
+    public String getAvatarLink() {
+        return avatarLink;
+    }
+
+    public String getPosterName() {
+        return posterName;
+    }
+
+    public String getPostText() {
+        return postText;
+    }
 }

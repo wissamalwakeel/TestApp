@@ -3,6 +3,7 @@ package com.meltwater.testapp;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -16,6 +17,7 @@ import java.net.MalformedURLException;
 
 import java.net.URL;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
@@ -27,11 +29,34 @@ import javax.net.ssl.HttpsURLConnection;
 public class MainActivity extends AppCompatActivity {
     private static final Logger logger = Logger.getLogger(MainActivity.class.toString());
 
+    private List<Message> messageList = new ArrayList<Message>();
+
+    private RecyclerView mRecyclerView;
+    private RecyclerAdapter adapter;
+
+    private int counter =0;
+    private String count;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+        // making the first call to populate the list
+        updateList();
+
     }
+
+    public void updateList(){
+        adapter = new RecyclerAdapter(MainActivity.this, messageList);
+        mRecyclerView.setAdapter(adapter);
+        adapter.clearAdapter();
+        messageList = getMessagesList();
+        adapter.notifyDataSetChanged();
+    }
+
 
     @Override
     protected void onStart() {
@@ -41,11 +66,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-
-        List<Message> newMessages = getMessagesList();
-
     }
 
     /**
@@ -92,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
      * @return List <Message>
      */
     private List<Message> messageJsonArrayExtractor(JSONObject jsonIn) {
-        List<Message> messages = new LinkedList<>();
+        List<Message> messages = new ArrayList<Message>();
         if (jsonIn != null) {
             try {
                 JSONArray data = new JSONArray(jsonIn.getString("data"));
