@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
         messageList = messageHandler.getMessagesList();

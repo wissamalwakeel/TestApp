@@ -65,7 +65,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyHolder> {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                // add new messages heres
                 messageHandler = new MessageHandler();
                 ArrayList<Message> existingMessageList = messageList;
                 clearAdapter();
@@ -73,7 +72,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyHolder> {
                 MyAdapter.this.notifyDataSetChanged();
                 swipeRefreshLayout.setRefreshing(false);
             }
-        },3000);
+        },1000);
     }
 
 

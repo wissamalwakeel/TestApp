@@ -28,7 +28,6 @@ public class Message {
         this.posterName = extractUserData(message, "username");
         this.avatarLink = extractUserData(message, "avatar_image");
         this.messageId = extractMessageData(message, "id");
-        this.posterName = this.posterName + "    Message ID:" + extractMessageData(message, "id");
     }
 
 
