@@ -8,23 +8,9 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.MalformedURLException;
-
-import java.net.URL;
 
 import java.util.ArrayList;
-import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import javax.net.ssl.HttpsURLConnection;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -57,16 +43,6 @@ public class MainActivity extends AppCompatActivity {
         adapter = new MyAdapter(this, messageList, swipeRefreshLayout);
         recyclerView.setAdapter(adapter);
     }
-
-    public void updateList(){
-//        adapter = new MyAdapter(MainActivity.this, messageList);
-//        mRecyclerView.setAdapter(adapter);
-//        adapter.clearAdapter();
-//        messageList = getMessagesList();
-//        adapter.notifyDataSetChanged();
-//        mRecyclerView.invalidate();
-    }
-
 
     @Override
     protected void onStart() {

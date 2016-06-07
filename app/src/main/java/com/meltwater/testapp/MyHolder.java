@@ -1,5 +1,6 @@
 package com.meltwater.testapp;
 
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
@@ -8,8 +9,8 @@ import com.android.volley.toolbox.NetworkImageView;
 /**
  * Created by wissam on 05/06/16.
  */
-public class MyHolder  extends RecyclerViewRowHolder implements View.OnClickListener {
-    NetworkImageView avatarView;
+public class MyHolder extends RecyclerView.ViewHolder  implements View.OnClickListener {
+    NetworkImageView avatar;
     TextView posterName;
     TextView bodyText;
     ItemClickListener itemClickListener;
@@ -18,7 +19,7 @@ public class MyHolder  extends RecyclerViewRowHolder implements View.OnClickList
     public MyHolder(View itemView) {
         super(itemView);
 
-        avatarView = (NetworkImageView) itemView.findViewById(R.id.avatarImage);
+        avatar = (NetworkImageView) itemView.findViewById(R.id.avatarImage);
         posterName = (TextView) itemView.findViewById(R.id.posterName);
         bodyText = (TextView) itemView.findViewById(R.id.bodyText);
 
