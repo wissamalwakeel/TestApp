@@ -11,7 +11,7 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -107,17 +107,12 @@ public class MessageHandler {
     }
 
     public ArrayList<Message> sortMessageList(ArrayList<Message> messageList) {
-        ArrayList<Message> sortedMessageList = new ArrayList<>();
-        ArrayList<String> ids = getIds(messageList);
-        Collections.sort(ids);
-        Collections.reverse(ids);
 
-        for (String id : ids) {
-            for (Message message : messageList) {
-                if (message.getMessageId() == id) {
-                    sortedMessageList.add(message);
-                }
-            }
+        Message[] object = messageList.toArray(new Message[messageList.size()]);
+        Arrays.sort(object);
+        ArrayList<Message> sortedMessageList = new ArrayList<>();
+        for (int i = 0 ; i < messageList.size()-1; i++) {
+            sortedMessageList.add(object[i]);
         }
         return sortedMessageList;
     }

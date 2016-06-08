@@ -1,18 +1,16 @@
 package com.meltwater.testapp;
 
 import android.text.Html;
+import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 /**
  * Created by wissam on 04/06/16.
  */
-public class Message {
-    private static final Logger logger = Logger.getLogger(Message.class.toString());
+public class Message implements Comparable{
+    private static final String TAG =  Message.class.toString();
     private String avatarLink;
     private String posterName;
     private String postText;
@@ -28,6 +26,7 @@ public class Message {
         this.posterName = extractUserData(message, "username");
         this.avatarLink = extractUserData(message, "avatar_image");
         this.messageId = extractMessageData(message, "id");
+        Log.v(TAG, "message created with message id:" + this.getMessageId());
     }
 
 
@@ -43,7 +42,7 @@ public class Message {
                 return text;
             }
         } catch (JSONException e) {
-            logger.log(Level.SEVERE, e.toString());
+            Log.v(TAG, "error extracting "+ field + " stackTrace:" + e.toString());
         }
         return "";
     }
@@ -64,7 +63,7 @@ public class Message {
             }
             return data;
         } catch (JSONException e) {
-            logger.log(Level.SEVERE, e.toString());
+            Log.v(TAG, "error extracting "+ field + " stackTrace:" + e.toString());
         }
         return "";
     }
@@ -83,5 +82,23 @@ public class Message {
 
     public String getMessageId() {
         return this.messageId;
+    }
+
+    @Override
+    public int compareTo(Object another) {
+        final int before = -1;
+        final int equal = 0;
+        final int after = 1;
+        Message other;
+        if (another instanceof Message) {
+            other = (Message) another;
+            if (this.getMessageId().equals(other.getMessageId())) {
+                return equal;
+            } else if (Integer.valueOf(this.getMessageId()) > Integer.valueOf(other.getMessageId())) {
+                return before;
+            }
+            return after;
+        }
+        return 0;
     }
 }
